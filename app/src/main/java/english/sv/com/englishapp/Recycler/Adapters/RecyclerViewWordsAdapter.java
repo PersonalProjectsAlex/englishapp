@@ -2,14 +2,19 @@ package english.sv.com.englishapp.Recycler.Adapters;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.mapzen.speakerbox.Speakerbox;
+
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 
 import java.util.List;
 import java.util.Locale;
@@ -42,8 +47,24 @@ public class RecyclerViewWordsAdapter extends RecyclerView.Adapter<WordsRecycler
     @Override
     public void onBindViewHolder(WordsRecyclerViewHolder holder, final int position) {
         holder.word.setText("Word: " + itemList.get(position).getWord());
-        holder.meaning.setText("Meaning: " + itemList.get(position).getMeaning());
+        translateWords();
+        holder.meaning.setText("Meaning: " + itemList.get(position).getWord());
         holder.sentence.setText("Sentence:" + itemList.get(position).getSentence());
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                TranslateOptions options = TranslateOptions.newBuilder()
+                        .setApiKey("AIzaSyBvFwS-M4C0oI7O9gSPPFNZbUZRFm8Tbec")
+                        .build();
+                Translate translate = options.getService();
+                final Translation translation =
+                        translate.translate(itemList.get(position).getWord(),
+                                Translate.TranslateOption.targetLanguage("es"));
+
+                Log.i("HOla:",translation.getTranslatedText());
+                return null;
+            }
+        }.execute();
 
         tts = new TextToSpeech(context, this);
 
@@ -80,5 +101,11 @@ public class RecyclerViewWordsAdapter extends RecyclerView.Adapter<WordsRecycler
     private void speakOut(String text) {
 
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null,"id1");
+    }
+
+    private void translateWords(){
+
+
+
     }
 }

@@ -1,16 +1,21 @@
 package english.sv.com.englishapp.Words;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
-import com.mapzen.speakerbox.Speakerbox;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
+
 
 import java.util.List;
 
@@ -26,6 +31,8 @@ public class WordsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private RecyclerViewWordsAdapter adapter;
+    final String app_id = "2f309438";
+    final String app_key = "242dbacce888ba0184329f02147c5bdd";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,8 @@ public class WordsActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         request();
+
+
     }
 
     public void request(){
@@ -68,4 +77,6 @@ public class WordsActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 }
